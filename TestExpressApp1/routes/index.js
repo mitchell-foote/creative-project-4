@@ -27,7 +27,7 @@ var questionList = [
         answer: "paris"
     },
     {
-        text: "Four major religions claim this city for their own, The dome over this rock is quite impressive though.",
+        text: "Four major religions claim this city for their own.",
         answer: "jerusalem"
     },
     {
@@ -71,7 +71,7 @@ router.get('/', function (req, res) {
 });
 
 
-router.get('/carmen', function (req, res) {
+router.post('/carmen', function (req, res) {
     console.log("In carmen");
     var theQuestionNumber = req.body.questionNumber;
 
@@ -80,12 +80,16 @@ router.get('/carmen', function (req, res) {
         clue: questionList[theQuestionNumber]
     }
     console.log(req.body);
+    console.log(response);
+    res.send(response);
     
 });
 
 router.post('/guess', function (req, res) {
     console.log("in guess");
-    console.log(req.body);
+    
+    
+    console.log(req.body.guess);
     if (req.body.currentQuestion === -1) {
         console.log("In first question")
         var firstQuestion = {
@@ -99,10 +103,16 @@ router.post('/guess', function (req, res) {
     }
     else
     {
-        var questionAnswer = questionList[req.currentQuestion];
-        var returnedAnswer = req.data.quess;
-        if (questionAnswer === returnedAnswer.toLowerCase()) {
-            if (req.body.numberCorrect > 3) {
+        console.log("Not in first question");
+        var questionAnswer = questionList[req.body.currentQuestion];
+        console.log("The answer to the question is " + questionList[req.body.currentQuestion].answer);
+       
+
+        var returnedAnswer = req.body.guess;
+        console.log("The answer given is " + returnedAnswer);
+        
+        if (questionAnswer.answer === returnedAnswer.toLowerCase()) {
+            if (req.body.numberCorrect > 4) {
                 var finished = {
                     isCorrect: true,
                     message: "Congradulations! You caught Carmen Sandiego!",
@@ -112,6 +122,7 @@ router.post('/guess', function (req, res) {
                 res.send(finished);
             }
             else {
+                console.log("Incorrect Answer");
                 var nextNumber = Math.floor(Math.random() * (8));
                 var response = {
                     isCorrect: true,
@@ -124,7 +135,7 @@ router.post('/guess', function (req, res) {
         }
         else {
             var nextMessage = Math.floor(Math.random() * (7 + 1));
-
+            console.log(commentList[nextMessage]);
             var response = {
                 isCorrect: false,
                 message: commentList[nextMessage],

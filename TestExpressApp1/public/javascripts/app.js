@@ -18,12 +18,13 @@ function mainCtrl($scope, $http) {
         var carmenURL = '/carmen';
         $http({
             url: carmenURL,
-            method: "GET",
+            method: "POST",
             data: formData
         }).success(function (data, status, headers, config) {
             console.log("Next Question Recieved");
+            console.log(data);
             $scope.CarmenComment = data.message;
-            $scope.CarmenClue = data.clue;
+            $scope.CarmenClue = data.clue.text;
         }).error(function (data, status, headers, config) {
             console.log("Next Question Failure");
             alert("Carmen has gone dark. Come back again later");
@@ -43,16 +44,20 @@ function mainCtrl($scope, $http) {
             data: formData
         }).success(function (data, status, headers, config) {
             console.log("Sent data recieved");
+            console.log(data);
             if (data.isCorrect) {
-                $scope.CarmenComment = data.message;
+                $scope.CarmenComment = data.message.text;
                 if (data.continue) {
                     $scope.CurrentQuestion = data.nextQuestion;
                     $scope.NumberOfAnswered = $scope.NumberOfAnswered + 1;
                     $scope.GetNextQuestion();
                 }
+                else {
+                    $scope.CarmenComment = data.message;
+                }
             }
             else {
-                $scope.CarmenComment = data.message;
+                $scope.CarmenComment = data.message.text;
             }
         }).error(function (data, status, headers, config) {
             debugger;
