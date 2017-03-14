@@ -1,6 +1,13 @@
-﻿var app = window.angular.module('app', [])
+﻿
+
+var app = window.angular.module('app', [])
 
 app.controller('mainCtrl', mainCtrl);
+
+function modelActivate() {
+    $('#myModal').modal();
+}
+
 
 function mainCtrl($scope, $http) {
 
@@ -54,6 +61,8 @@ function mainCtrl($scope, $http) {
                 }
                 else {
                     $scope.CarmenComment = data.message;
+                    modelActivate();
+                    
                 }
             }
             else {
